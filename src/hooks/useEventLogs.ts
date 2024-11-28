@@ -63,7 +63,7 @@ interface UseLogParserResult {
   receipt: TransactionReceipt | null;
 }
 
-export function useLogParser(txHash: string): UseLogParserResult {
+export function useEventLogs(txHash: string): UseLogParserResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [decodedLogs, setDecodedLogs] = useState<DecodedLog[] | null>(null);
