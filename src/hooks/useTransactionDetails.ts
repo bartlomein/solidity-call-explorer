@@ -59,8 +59,6 @@ export function useLogParser(txHash: string): UseLogParserResult {
       if (!txHash) return;
 
       try {
-        setIsLoading(true);
-
         // Fetch transaction receipt
         const response = await fetch(
           `https://api.etherscan.io/api?module=proxy&action=eth_getTransactionReceipt&txhash=${txHash}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API}`
@@ -115,5 +113,6 @@ export function useLogParser(txHash: string): UseLogParserResult {
     parseTransactionLogs();
   }, [txHash]);
 
+  console.log({ isLoading, error, decodedLogs, receipt });
   return { isLoading, error, decodedLogs, receipt };
 }

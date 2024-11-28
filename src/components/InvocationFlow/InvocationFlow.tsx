@@ -4,15 +4,23 @@ import { ethers } from "ethers";
 import { useState, useEffect } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import { useLogParser } from "@/hooks/useTransactionDetails";
+import { TransactionFlow } from "./TransactionFlow";
 
-// API Functions
+const InvocationFlow = ({ hash }: { hash: string }) => {
+  console.log("hash", hash);
+  const { isLoading, error, receipt, decodedLogs } = useLogParser(hash);
 
-// Component
-const TransactionFlow = ({ hash }: { hash: string }) => {
-  const { decodedLogs, receipt } = useLogParser(hash);
-  console.log({ decodedLogs, receipt });
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!receipt) {
+    return <div>no receipt</div>;
+  }
 
-  return <div className=""></div>;
+  return (
+    <div className="max-w-4xl mx-auto">
+      <TransactionFlow receipt={receipt} decodedLogs={decodedLogs || []} />
+    </div>
+  );
 };
 
-export default TransactionFlow;
+export default InvocationFlow;
