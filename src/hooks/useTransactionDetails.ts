@@ -25,12 +25,6 @@ interface TransactionReceipt {
   type: string;
 }
 
-interface UseTransactionReceiptResult {
-  isLoading: boolean;
-  error: Error | null;
-  receipt: TransactionReceipt | null;
-}
-
 interface DecodedLog {
   address: string;
   eventName: string;
@@ -51,13 +45,14 @@ interface UseLogParserResult {
   isLoading: boolean;
   error: Error | null;
   decodedLogs: DecodedLog[] | null;
+  receipt: TransactionReceipt | null;
 }
 
 export function useLogParser(txHash: string): UseLogParserResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [decodedLogs, setDecodedLogs] = useState<DecodedLog[] | null>(null);
-  const [receipt, setReceipt] = useState();
+  const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
 
   useEffect(() => {
     const parseTransactionLogs = async () => {

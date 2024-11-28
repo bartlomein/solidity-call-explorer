@@ -11,6 +11,7 @@ import { useLogParser } from "@/hooks/useTransactionDetails";
 const TransactionFlow = ({ hash }: { hash: string }) => {
   const { decodedLogs, receipt } = useLogParser(hash);
   console.log({ decodedLogs, receipt });
+
   return <div className=""></div>;
 };
 
