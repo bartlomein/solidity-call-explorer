@@ -70,7 +70,7 @@ export const LogItem = ({ log }) => {
   };
 
   return (
-    <div className="bg-muted border-l-2 border-gray-200">
+    <div className="bg-muted border-l-2 border-gray-200 bg-r rounded-lg">
       <button
         className="flex items-center gap-2 p-2 w-full text-left hover:bg-gray-50"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -86,7 +86,7 @@ export const LogItem = ({ log }) => {
         <div className="ml-6 p-2 space-y-3 text-sm">
           <div className="space-y-1">
             <div className="text-gray-500">Topic:</div>
-            <div className="font-mono break-all">{formatValue(log.topic)}</div>
+            <div className="font-mono break-all">{log.topic}</div>
           </div>
 
           <div className="space-y-1">

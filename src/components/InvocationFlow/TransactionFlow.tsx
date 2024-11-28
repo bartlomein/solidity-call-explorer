@@ -5,6 +5,7 @@ import { LogItem } from "./LogItem";
 
 export const TransactionFlow = ({ receipt, decodedLogs }: any) => {
   const [showLogs, setShowLogs] = useState(true);
+  console.log("receipt", receipt);
 
   return (
     <div className="space-y-4 p-4">
@@ -16,10 +17,10 @@ export const TransactionFlow = ({ receipt, decodedLogs }: any) => {
             <p className="text-gray-500">Status</p>
             <p
               className={`font-medium ${
-                receipt.status === "1" ? "text-green-600" : "text-red-600"
+                receipt.status === "0x1" ? "text-green-600" : "text-red-600"
               }`}
             >
-              {receipt.status === "1" ? "Success" : "Failed"}
+              {receipt.status === "0x1" ? "Success" : "Failed"}
             </p>
           </div>
           <div>
