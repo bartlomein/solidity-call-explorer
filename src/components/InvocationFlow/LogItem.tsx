@@ -1,7 +1,20 @@
+// LogItem.tsx
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import {
+  type DecodedLog,
+  type UnDecodedLog,
+} from "@/hooks/useTransactionDetails";
 
-const formatValue = (value) => {
+type LogItemProps = {
+  log: DecodedLog | UnDecodedLog;
+};
+
+const isDecodedLog = (log: DecodedLog | UnDecodedLog): log is DecodedLog => {
+  return "decoded" in log && log.decoded === true;
+};
+
+const formatValue = (value: any) => {
   // Check if value is an address
   if (
     typeof value === "string" &&
@@ -21,16 +34,6 @@ const formatValue = (value) => {
         </button>
       </div>
     );
-  }
-
-  // Check if value is a large number (potential ETH amount)
-  if (typeof value === "string" && !isNaN(value)) {
-    const num = Number(value);
-    if (num > 1e9) {
-      // Over 1 billion - likely wei
-      const eth = (num / 1e18).toFixed(4);
-      return `${eth} ETH`;
-    }
   }
 
   // Check if value is a topic/hash
@@ -57,53 +60,96 @@ const formatValue = (value) => {
   return String(value);
 };
 
-export const LogItem = ({ log }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const formatArgs = (args) => {
+const DecodedLogContent = ({ log }: { log: DecodedLog }) => {
+  const formatArgs = (args: any) => {
     return Object.entries(args).map(([key, value]) => (
-      <div key={key} className="grid grid-cols-12 gap-2 hover:bg-gray-50 p-1">
-        <span className="col-span-1 text-gray-500">{key}:</span>
+      <div key={key} className="grid grid-cols-12 gap-2 hover:bg-muted p-1">
+        <span className="col-span-1 text-muted-foreground">{key}:</span>
         <span className="col-span-11">{formatValue(value)}</span>
       </div>
     ));
   };
 
   return (
-    <div className="bg-muted border-l-2 border-gray-200 bg-r rounded-lg">
+    <div className="ml-6 p-2 space-y-3 text-sm">
+      <div className="space-y-1">
+        <div className="text-muted-foreground">Event:</div>
+        <div className="font-mono break-all">{log.eventName}</div>
+      </div>
+
+      <div className="space-y-1">
+        <div className="text-muted-foreground">Parameters:</div>
+        <div className="ml-2 space-y-1">
+          {log.params.map((param, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-12 gap-2 hover:bg-muted p-1"
+            >
+              <span className="col-span-3 text-muted-foreground">
+                {param.name} ({param.type}):
+              </span>
+              <span className="col-span-9">{formatValue(param.value)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const UndecodedLogContent = ({ log }: { log: UnDecodedLog }) => {
+  return (
+    <div className="ml-6 p-2 space-y-3 text-sm">
+      Log item could not be decoded
+      <div className="space-y-1">
+        <div className="text-muted-foreground">Topics:</div>
+        <div className="ml-2 space-y-1">
+          {log.topics.map((topic, index) => (
+            <div key={index} className="break-all font-mono">
+              {formatValue(topic)}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="space-y-1">
+        <div className="text-muted-foreground">Data:</div>
+        <div className="font-mono break-all">{formatValue(log.data)}</div>
+      </div>
+      <div className="space-y-1">
+        <div className="text-muted-foreground">Contract:</div>
+        <div className="font-mono">{formatValue(log.address)}</div>
+      </div>
+    </div>
+  );
+};
+
+export const LogItem = ({ log }: LogItemProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isDecoded = isDecodedLog(log);
+
+  return (
+    <div className="bg-card border-l-2 border-border rounded-lg">
       <button
-        className="flex items-center gap-2 p-2 w-full text-left hover:bg-gray-50"
+        className="flex items-center gap-2 p-2 w-full text-left hover:bg-muted/50"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-        <span className="text-blue-600">{log.name}</span>
-        <span className="text-gray-400 ml-2 font-mono text-sm">
-          {log.signature}
+        <span className="text-primary">
+          {isDecoded ? log.eventName : `Event at ${log.address}`}
         </span>
+        {isDecoded && (
+          <span className="text-muted-foreground ml-2 font-mono text-sm">
+            {log.signature}
+          </span>
+        )}
       </button>
 
-      {isExpanded && (
-        <div className="ml-6 p-2 space-y-3 text-sm">
-          <div className="space-y-1">
-            <div className="text-gray-500">Topic:</div>
-            <div className="font-mono break-all">{log.topic}</div>
-          </div>
-
-          <div className="space-y-1">
-            <div className="text-gray-500">Args:</div>
-            <div className="ml-2 space-y-1">{formatArgs(log.args)}</div>
-          </div>
-
-          <div className="space-y-1">
-            <div className="text-gray-500">Fragment:</div>
-            <div className="ml-2 space-y-1">
-              <div>Type: {log.fragment.type}</div>
-              <div>Name: {log.fragment.name}</div>
-              <div>Anonymous: {String(log.fragment.anonymous)}</div>
-            </div>
-          </div>
-        </div>
-      )}
+      {isExpanded &&
+        (isDecoded ? (
+          <DecodedLogContent log={log} />
+        ) : (
+          <UndecodedLogContent log={log} />
+        ))}
     </div>
   );
 };

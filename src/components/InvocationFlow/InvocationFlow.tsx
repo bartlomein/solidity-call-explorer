@@ -7,7 +7,6 @@ import { useLogParser } from "@/hooks/useTransactionDetails";
 import { TransactionFlow } from "./TransactionFlow";
 
 const InvocationFlow = ({ hash }: { hash: string }) => {
-  console.log("hash", hash);
   const { isLoading, error, receipt, decodedLogs } = useLogParser(hash);
 
   if (isLoading) return <div>Loading...</div>;
