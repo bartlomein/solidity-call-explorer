@@ -29,6 +29,7 @@ interface DecodedLog {
   address: string;
   eventName: string;
   signature: string;
+  decoded: boolean;
   params: {
     name: string;
     type: string;
@@ -40,11 +41,25 @@ interface DecodedLog {
     data: string;
   };
 }
+interface UnDecodedLog {
+  address: string;
+  topics: string[];
+  data: string;
+  blockNumber: string;
+  transactionHash: string;
+  transactionIndex: string;
+  blockHash: string;
+  logIndex: string;
+  removed: boolean;
+  decoded: boolean;
+}
+
+type Logs = DecodedLog | UnDecodedLog;
 
 interface UseLogParserResult {
   isLoading: boolean;
   error: Error | null;
-  decodedLogs: DecodedLog[] | null;
+  logs: Logs[] | null;
   receipt: TransactionReceipt | null;
 }
 
@@ -69,7 +84,8 @@ export function useLogParser(txHash: string): UseLogParserResult {
         setReceipt(rec);
 
         if (!rec || !rec.logs) {
-          throw new Error("No logs found");
+          setDecodedLogs([]);
+          return;
         }
 
         const parsedLogs: any = [];
@@ -87,13 +103,18 @@ export function useLogParser(txHash: string): UseLogParserResult {
 
             if (abiData.status === "1") {
               const abi = JSON.parse(abiData.result);
+
               const iface = new ethers.Interface(abi);
+
               const decoded = iface.parseLog({
                 topics: log.topics,
                 data: log.data,
               });
-
-              parsedLogs.push(decoded);
+              if (!decoded) {
+                parsedLogs.push({ ...log, decoded: false });
+              } else {
+                parsedLogs.push({ ...decoded, decoded: true });
+              }
             }
           } catch (e) {
             console.warn("Failed to decode log:", e);
@@ -113,6 +134,5 @@ export function useLogParser(txHash: string): UseLogParserResult {
     parseTransactionLogs();
   }, [txHash]);
 
-  console.log({ isLoading, error, decodedLogs, receipt });
   return { isLoading, error, decodedLogs, receipt };
 }

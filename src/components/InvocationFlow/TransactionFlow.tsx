@@ -5,11 +5,9 @@ import { LogItem } from "./LogItem";
 
 export const TransactionFlow = ({ receipt, decodedLogs }: any) => {
   const [showLogs, setShowLogs] = useState(true);
-  console.log("receipt", receipt);
 
   return (
     <div className="space-y-4 p-4">
-      {/* Receipt Summary */}
       <div className="rounded-lg bg-white shadow p-4">
         <h2 className="text-lg font-semibold mb-4">Transaction Receipt</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
@@ -44,7 +42,6 @@ export const TransactionFlow = ({ receipt, decodedLogs }: any) => {
         </div>
       </div>
 
-      {/* Logs Section */}
       <div className="rounded-lg bg-white shadow p-4">
         <button
           className="flex items-center gap-2 mb-4"
@@ -58,7 +55,7 @@ export const TransactionFlow = ({ receipt, decodedLogs }: any) => {
 
         {showLogs && (
           <div className="space-y-2">
-            {decodedLogs.map((log, index) => (
+            {decodedLogs?.map((log, index) => (
               <LogItem key={index} log={log} />
             ))}
           </div>
