@@ -16,6 +16,12 @@ A tool for exploring and visualizing Ethereum transaction calls and events.
 - Etherscan API key
 - Alchemy API key
 
+## Video
+
+https://github.com/user-attachments/assets/f58e0050-2149-48f2-a8a2-02d74ab3ba30
+
+
+
 ## Setup
 
 1. Clone the repository:
@@ -97,7 +103,6 @@ This is an application to be able to view transaction call and event data for a 
 
 - Client Side implementation: Discussed in more detail in above sections
 
-### Potential upcoming features
 
 ### Potential upcoming features
 
