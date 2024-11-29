@@ -15,9 +15,8 @@ const CallExplorer = () => {
       <div className="fixed top-4 right-4 w-[400px]">
         <TransactionSearch onChange={handleTransactionSearch} />
       </div>
-      {/* Rest of content */}
+
       <InvocationFlow hash={txHash} />
-      <div className="mt-20">{txHash && <p>Transaction Hash: {txHash}</p>}</div>
     </div>
   );
 };

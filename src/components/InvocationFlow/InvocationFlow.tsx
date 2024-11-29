@@ -8,6 +8,7 @@ import { useEventLogs } from "@/hooks/useEventLogs";
 import { useTransactionTrace } from "@/hooks/useTransactionTrace";
 import TransactionTraceTree from "../TransactionTraceTree /TransactionTraceTree";
 import TransactionTraceViewer from "../TransactionTraceTree /TransactionTraceTree";
+import EventLog from "../EventLog/EventLog";
 
 const InvocationFlow = ({ hash }: { hash: string }) => {
   const {
@@ -22,16 +23,18 @@ const InvocationFlow = ({ hash }: { hash: string }) => {
     trace,
   } = useTransactionTrace(hash);
 
+  console.log("logs", logs);
+
   return (
-    <div className="max-w-10xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {isTraceLoading ? <div>Loading Trace</div> : null}
       {trace && !isTraceLoading ? (
         <TransactionTraceViewer data={trace} />
       ) : null}
-
       {traceError ? (
         <div className="text-red-500">{JSON.stringify(traceError)}</div>
       ) : null}
+      {logs && !isEventsLoading ? <EventLog logs={logs} /> : null}
     </div>
   );
 };

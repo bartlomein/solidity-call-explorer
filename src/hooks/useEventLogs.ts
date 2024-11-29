@@ -25,21 +25,21 @@ type TransactionReceipt = {
   type: string;
 };
 
+type Fragment = {
+  name: string;
+  type: string;
+  indexed: boolean;
+  anonymous: boolean;
+  inputs: any[];
+};
+
 type DecodedLog = {
-  address: string;
-  eventName: string;
+  fragment: Fragment;
+  name: string;
+  transfer: string;
   signature: string;
   decoded: boolean;
-  params: {
-    name: string;
-    type: string;
-    value: any;
-    indexed: boolean;
-  }[];
-  raw: {
-    topics: string[];
-    data: string;
-  };
+  topic: string | string[];
 };
 type UnDecodedLog = {
   address: string;
@@ -54,19 +54,19 @@ type UnDecodedLog = {
   decoded: boolean;
 };
 
-type Logs = DecodedLog | UnDecodedLog;
+export type Log = DecodedLog | UnDecodedLog;
 
 type UseLogParserResult = {
   isLoading: boolean;
   error: Error | null;
-  logs: Logs[] | null;
+  logs: Log[] | null;
   receipt: TransactionReceipt | null;
 };
 
 export function useEventLogs(txHash: string): UseLogParserResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [logs, setLogs] = useState<Logs[] | null>(null);
+  const [logs, setLogs] = useState<Log[] | null>(null);
   const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ export function useEventLogs(txHash: string): UseLogParserResult {
               if (!decoded) {
                 parsedLogs.push({ ...log, decoded: false });
               } else {
-                parsedLogs.push({ ...decoded, decoded: true });
+                parsedLogs.push({ ...log, ...decoded, decoded: true });
               }
             }
           } catch (e) {
