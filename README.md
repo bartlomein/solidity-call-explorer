@@ -32,7 +32,7 @@ npm install
 npm install
 ```
 
-3.Create a .env file in the root directory with your API keys:
+3. Create a .env file in the root directory with your API keys:
 
 ```bash
 NEXT_PUBLIC_ETHERSCAN_API=your_etherscan_api_key
@@ -53,47 +53,40 @@ npm test
 
 ## Analysis
 
-### Design Decisions
+## Design Decisions, Trade-offs, Potential Optimizations, and Short-cuts
 
 This is an application to be able to view transaction call and event data for a particular transaction.
 
 #### Tech Stack
 
-Next.js 15
-React 18
-TypeScript
-Tailwind CSS
-Ethers.js
-Jest
-React Testing Library
-shadcn/ui components
+- Next.js 15: Chosen for its ease of use and the potential to extend the application to server-side rendering in the future. Although the current implementation is a Single Page Application (SPA), Next.js provides the flexibility to transition to server-side rendering.
 
-I have chosen the above tech stack as it is easy to use, read and work with.
+- React 18: Provides a robust framework for building the user interface.
 
-- NextJS was chosen as even though I did not do any server side rendering, the next step of this SPA would be to make each transaction hash into a route and handle server side calling on a route by route basis.
+- TypeScript: Ensures type safety and improves code quality.
 
-- Tailwind is very easy to work with and read.
+- Tailwind CSS: Chosen for its utility-first approach, making it easy to style components.
 
-- Ethers is smaller than Web3 js and is easier to work with.
+- Ethers.js: Preferred over Web3.js due to its smaller size and ease of use.
 
-- Jest and React testing library are the standard when it comes to testing.
+- Jest and React Testing Library: Standard tools for testing React applications.
 
-- Shadcn/ui components allow for a quick install and customizability as you only install what you need and have the codebase on disk ready to be changed to suit your needs.
+- shadcn/ui components: Allows for quick installation and customization, as only the necessary components are installed and can be modified as needed.
 
 ### Trade offs
 
-As written above, one of the biggest trade offs is client side vs server side. as this is just a SPA as noted in the assignement notes, I went with a client side implementation.
+Client-side Implementation: The current implementation is entirely client-side, which simplifies the initial development and deployment. However, this approach exposes API keys and may result in slower initial load times due to client-side data fetching.
 
-To grow this application and make it a truly server side application, Once a user would search for a transaction, and the tx hash was correct, I would route to /transaction/[hash]. That way I could do the quering of data server-side giving a few benefits such as obfuscating API keys and faster paint times.
+Server-side Potential: Transitioning to a server-side implementation would provide several benefits, including obfuscating API keys and improving performance by reducing the time to first paint. This would involve routing to /transaction/[hash] and performing data fetching server-side.
 
 ### Potential optimizations
 
-Biggest optimization would be to not delay event ABI call look up. As I am delaying to go around rate limits, the events come in later because of the delays.
+Event ABI Call Look-up: Currently, event ABI look-ups are delayed to avoid rate limits, which results in slower event data retrieval. Optimizing this process could significantly improve the user experience.
 
-Splitting to a server-side page based application would also code split per page. As there would now by 2 pages, some of the code would be split and server to the client as needed.
+Code Splitting: By transitioning to a server-side page-based application, code splitting could be implemented. This would reduce the initial load time by serving only the necessary code for each page.
 
 ### Short cuts
 
-When I first started working on this application, I did not have access to trace call data. I figured out that I can get the logs, get the needed ABI and decode it to get more data. However I could not figure out how to match them to the corresponding calls. I wanted to ship this first as I continue to research how to connect them.
+Trace Call Data: Initially, there was no access to trace call data. The solution involved fetching logs, obtaining the necessary ABI, and decoding the data. However, matching the logs to the corresponding calls was not fully resolved. This approach was taken to ship the initial version while continuing to research a more robust solution.
 
-As this is mostly a desktop first application, I did some quick mobile styling but it could use more work there as a fast follow.
+Mobile Styling: The application is primarily designed for desktop use. Some quick mobile styling was implemented, but it requires further refinement to provide a better mobile experience.
