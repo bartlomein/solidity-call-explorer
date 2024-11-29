@@ -99,6 +99,8 @@ This is an application to be able to view transaction call and event data for a 
 
 ### Potential upcoming features
 
-[] Search function to search through events and calls
-[] More detailed tracecall data such as names of contracts being interacted with, etc.
-[] Wallet hookup to let user see their transactions
+-[] Search function to search through events and calls
+
+-[] More detailed tracecall data such as names of contracts being interacted with, etc.
+
+-[] Wallet hookup to let user see their transactions
