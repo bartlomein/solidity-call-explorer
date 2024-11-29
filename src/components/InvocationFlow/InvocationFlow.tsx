@@ -7,7 +7,7 @@ import { EventLog } from "../EventLog/EventLog";
 import { Loading } from "../Loading/Loading";
 import { Error } from "../Error/Error";
 
-const InvocationFlow = ({ hash }: { hash: string }) => {
+export const InvocationFlow = ({ hash }: { hash: string }) => {
   const {
     isLoading: isEventsLoading,
     error: logError,
@@ -38,5 +38,3 @@ const InvocationFlow = ({ hash }: { hash: string }) => {
     </div>
   );
 };
-
-export default InvocationFlow;
