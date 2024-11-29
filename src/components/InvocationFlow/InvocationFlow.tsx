@@ -4,8 +4,6 @@ import { useTransactionTrace } from "@/hooks/useTransactionTrace";
 
 import { TransactionTraceViewer } from "../TransactionTraceTree /TransactionTraceTree";
 import { EventLog } from "../EventLog/EventLog";
-import { Loading } from "../Loading/Loading";
-import { Error } from "../Error/Error";
 
 export const InvocationFlow = ({ hash }: { hash: string }) => {
   const {
