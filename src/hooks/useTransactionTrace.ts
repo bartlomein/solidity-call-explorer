@@ -84,7 +84,6 @@ export function useTransactionTrace(txHash: string): UseTraceResult {
 
     fetchTrace();
   }, [txHash]);
-  console.log("error", error);
 
   return { isLoading, error, trace };
 }
