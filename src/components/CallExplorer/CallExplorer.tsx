@@ -1,19 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import TransactionSearch from "../TransactionSearch/TransactionSearch";
-import InvocationFlow from "../InvocationFlow/InvocationFlow";
+import { TransactionSearch } from "../TransactionSearch/TransactionSearch";
+import { InvocationFlow } from "../InvocationFlow/InvocationFlow";
 
 const CallExplorer = () => {
   const [txHash, setTxHash] = useState("");
 
-  const handleTransactionSearch = (hash: string) => {
-    setTxHash(hash);
-  };
-
   return (
-    <div className="w-full">
-      <div className="w-[400px] ml-auto py-4">
-        <TransactionSearch onChange={handleTransactionSearch} />
+    <div className="w-full h-screen">
+      <div className="max-w-6xl mx-auto mx-auto flex justify-end ">
+        <div className="w-[400px] p-4">
+          <TransactionSearch onChange={setTxHash} />
+        </div>
       </div>
 
       <InvocationFlow hash={txHash} />

@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
-const TransactionSearch = ({
+export const TransactionSearch = ({
   onChange,
 }: {
   onChange: (hash: string) => void;
@@ -27,7 +27,7 @@ const TransactionSearch = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex gap-2 ">
         <Input
           value={txHash}
           onChange={(e) => setTxHash(e.target.value)}
@@ -44,5 +44,3 @@ const TransactionSearch = ({
     </div>
   );
 };
-
-export default TransactionSearch;

@@ -38,28 +38,37 @@ const SingleLog = ({ isDecoded, name, inputs, args }: SingleLogP) => {
 };
 
 export const EventLog = ({ logs }: { logs: Log[] }) => {
+  if (logs.length === 0) {
+    return (
+      <div className="space-y-2 w-full max-w-8xl">
+        <Title name="No event logs for this transaction" align="center" />
+      </div>
+    );
+  }
   return (
     <div className="space-y-2 w-full max-w-8xl">
-      <div>
+      <div className="m-6">
         <Title name="Event Log" align="center" />
       </div>
-      {logs.map((log, index) => {
-        const { isDecoded, name, blockNumber, address, inputs, args } =
-          getEventDetails(log);
+      <div className="border rounded  mt-4">
+        {logs.map((log, index) => {
+          const { isDecoded, name, blockNumber, address, inputs, args } =
+            getEventDetails(log);
 
-        return (
-          <div key={index} className={`p-4 rounded-md`}>
-            <SingleLog
-              isDecoded={isDecoded}
-              name={name}
-              blockNumber={blockNumber}
-              address={address}
-              inputs={inputs}
-              args={args}
-            />
-          </div>
-        );
-      })}
+          return (
+            <div key={index} className={`p-4 rounded-md`}>
+              <SingleLog
+                isDecoded={isDecoded}
+                name={name}
+                blockNumber={blockNumber}
+                address={address}
+                inputs={inputs}
+                args={args}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

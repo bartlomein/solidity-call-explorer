@@ -8,7 +8,7 @@ body {
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
+    --background: 12 10% 3.9%; 
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -37,19 +37,10 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: black;
+    color:white;
   }
+ 
 }
 
 
-.bg-white {
-  @apply bg-card;
-}
-
-.hover\:bg-gray-50:hover {
-  @apply hover:bg-accent;
-}
-
-.border-gray-200 {
-  @apply border-border;
-}
