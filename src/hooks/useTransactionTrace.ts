@@ -1,36 +1,45 @@
-// useTransactionTrace.ts
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-interface TraceResponse {
-  action: {
-    callType: string;
-    from: string;
-    gas: string;
-    input: string;
-    to: string;
-    value: string;
-  };
-  blockHash: string;
-  blockNumber: number;
-  result: {
-    gasUsed: string;
-    output: string;
-  };
+type TransactionAction = {
+  from: string;
+  callType: "call" | "delegatecall" | "staticcall";
+  gas: string;
+  input: string;
+  to: string;
+  value: string;
+};
+
+type TransactionResult = {
+  gasUsed: string;
+  output: string;
+};
+
+export type TransactionTrace = {
+  action: TransactionAction;
+  result: TransactionResult;
   subtraces: number;
   traceAddress: number[];
   type: string;
+};
+
+export interface TransactionTraceResponse {
+  output: string;
+  stateDiff: null | any;
+  trace: TransactionTrace[];
+  vmTrace: null | any;
+  transactionHash: string;
 }
 
-interface UseTraceResult {
+type UseTraceResult = {
   isLoading: boolean;
   error: Error | null;
-  trace: TraceResponse[] | null;
-}
+  trace: TransactionTraceResponse | null;
+};
 
 export function useTransactionTrace(txHash: string): UseTraceResult {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [trace, setTrace] = useState<TraceResponse[] | null>(null);
+  const [trace, setTrace] = useState<TransactionTraceResponse | null>(null);
 
   useEffect(() => {
     const fetchTrace = async () => {
@@ -75,7 +84,6 @@ export function useTransactionTrace(txHash: string): UseTraceResult {
 
     fetchTrace();
   }, [txHash]);
-  console.log("trace", trace);
 
   return { isLoading, error, trace };
 }
