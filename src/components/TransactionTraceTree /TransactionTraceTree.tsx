@@ -77,7 +77,7 @@ const TraceItem = ({ trace, allTraces, depth = 0 }: TraceItemP) => {
 
       {isExpanded && childTraces.length > 0 && (
         <div className="ml-4">
-          {childTraces.map((childTrace, index) => (
+          {childTraces.map((childTrace) => (
             <TraceItem
               key={childTrace.traceAddress.join("-")}
               trace={childTrace}

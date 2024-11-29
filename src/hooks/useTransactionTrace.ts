@@ -24,9 +24,9 @@ export type TransactionTrace = {
 
 export interface TransactionTraceResponse {
   output: string;
-  stateDiff: null | any;
+  stateDiff: null | unknown;
   trace: TransactionTrace[];
-  vmTrace: null | any;
+  vmTrace: null | unknown;
   transactionHash: string;
 }
 

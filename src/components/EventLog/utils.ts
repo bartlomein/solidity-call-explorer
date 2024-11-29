@@ -1,7 +1,7 @@
 import { Log } from "@/hooks/useEventLogs";
 import { formatAddress } from "@/utils/eth.utils";
 
-export const formatArgs = (args: any[]) => {
+export const formatArgs = (args: unknown[]) => {
   return args.map((arg) => (arg ? arg?.toString() : ""));
 };
 

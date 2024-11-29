@@ -10,8 +10,8 @@ type SingleLogP = {
   name: string;
   blockNumber: string;
   address: string;
-  inputs: Record<string, any>[] | null;
-  args: Record<any, any> | null;
+  inputs: Record<string, string>[] | null;
+  args: string[] | null;
 };
 
 type EventLogP = {
