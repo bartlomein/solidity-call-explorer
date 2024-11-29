@@ -6,6 +6,9 @@ import {
   TransactionTraceResponse,
 } from "@/hooks/useTransactionTrace";
 
+import { formatValue } from "@/utils/eth.utils";
+import { Title } from "../Title/Title";
+
 type TransactionTraceViewerP = {
   data: TransactionTraceResponse;
 };
@@ -16,13 +19,7 @@ type TraceItemP = {
   depth?: number;
 };
 
-const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
-  const formatValue = (value: string) => {
-    if (!value || value === "0x0") return "0";
-    const val = parseInt(value, 16) / 1e18;
-    return val.toFixed(4);
-  };
-
+export const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
   const TraceItem = ({ trace, allTraces, depth = 0 }: TraceItemP) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const callType = trace.action.callType.toUpperCase();
@@ -93,10 +90,8 @@ const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
 
   return (
     <div className="max-w-8xl mx-auto p-4 bg-white rounded-lg shadow">
-      <h2 className="text-lg font-semibold mb-4">
-        Transaction: {data.transactionHash}
-      </h2>
-      <div className="border rounded p-4">
+      <Title name="Call Trace Log" align="center" />
+      <div className="border rounded p-4 mt-4">
         {data.trace && data.trace.length > 0 && (
           <TraceItem trace={data.trace[0]} allTraces={data.trace} />
         )}
@@ -104,5 +99,3 @@ const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
     </div>
   );
 };
-
-export default TransactionTraceViewer;

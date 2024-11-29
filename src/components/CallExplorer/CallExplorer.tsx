@@ -12,12 +12,11 @@ const CallExplorer = () => {
 
   return (
     <div className="w-full">
-      <div className="fixed top-4 right-4 w-[400px]">
+      <div className="w-[400px] ml-auto py-4">
         <TransactionSearch onChange={handleTransactionSearch} />
       </div>
-      {/* Rest of content */}
+
       <InvocationFlow hash={txHash} />
-      <div className="mt-20">{txHash && <p>Transaction Hash: {txHash}</p>}</div>
     </div>
   );
 };

@@ -25,21 +25,22 @@ type TransactionReceipt = {
   type: string;
 };
 
-type DecodedLog = {
-  address: string;
-  eventName: string;
+type Fragment = {
+  name: string;
+  type: string;
+  indexed: boolean;
+  anonymous: boolean;
+  inputs: any[];
+};
+
+export type DecodedLog = {
+  fragment: Fragment;
+  name: string;
+  transfer: string;
   signature: string;
   decoded: boolean;
-  params: {
-    name: string;
-    type: string;
-    value: any;
-    indexed: boolean;
-  }[];
-  raw: {
-    topics: string[];
-    data: string;
-  };
+  args: any[];
+  topic: string | string[];
 };
 type UnDecodedLog = {
   address: string;
@@ -54,25 +55,26 @@ type UnDecodedLog = {
   decoded: boolean;
 };
 
-type Logs = DecodedLog | UnDecodedLog;
+export type Log = UnDecodedLog &
+  ({ decoded: false } | ({ decoded: true } & DecodedLog));
 
 type UseLogParserResult = {
   isLoading: boolean;
   error: Error | null;
-  logs: Logs[] | null;
+  logs: Log[] | null;
   receipt: TransactionReceipt | null;
 };
 
 export function useEventLogs(txHash: string): UseLogParserResult {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [logs, setLogs] = useState<Logs[] | null>(null);
+  const [logs, setLogs] = useState<Log[] | null>(null);
   const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
 
   useEffect(() => {
     const parseTransactionLogs = async () => {
       if (!txHash) return;
-
+      setIsLoading(true);
       try {
         // Fetch transaction receipt
         const response = await fetch(
@@ -83,12 +85,16 @@ export function useEventLogs(txHash: string): UseLogParserResult {
         const rec = data.result;
         setReceipt(rec);
 
+        if (data.status === "0") {
+          setError(rec);
+        }
+
         if (!rec || !rec.logs) {
           setLogs([]);
           return;
         }
 
-        const parsedLogs: any = [];
+        let parsedLogs: any = [];
 
         // doing this to handle API rate limiting for ABI calls
         for (const log of rec.logs) {
@@ -113,18 +119,18 @@ export function useEventLogs(txHash: string): UseLogParserResult {
               if (!decoded) {
                 parsedLogs.push({ ...log, decoded: false });
               } else {
-                parsedLogs.push({ ...decoded, decoded: true });
+                parsedLogs.push({ ...log, ...decoded, decoded: true });
               }
             }
           } catch (e) {
             console.warn("Failed to decode log:", e);
-            // Push null for failed decodes to maintain index correlation
-            parsedLogs.push(null);
+            parsedLogs = [];
           }
         }
 
         setLogs(parsedLogs);
       } catch (err) {
+        console.log("err2", err);
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
         setIsLoading(false);
