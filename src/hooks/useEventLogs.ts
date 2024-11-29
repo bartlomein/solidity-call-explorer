@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 
-interface TransactionReceipt {
+type TransactionReceipt = {
   blockHash: string;
   blockNumber: string;
   contractAddress: string | null;
@@ -23,9 +23,9 @@ interface TransactionReceipt {
   transactionHash: string;
   transactionIndex: string;
   type: string;
-}
+};
 
-interface DecodedLog {
+type DecodedLog = {
   address: string;
   eventName: string;
   signature: string;
@@ -40,8 +40,8 @@ interface DecodedLog {
     topics: string[];
     data: string;
   };
-}
-interface UnDecodedLog {
+};
+type UnDecodedLog = {
   address: string;
   topics: string[];
   data: string;
@@ -52,21 +52,21 @@ interface UnDecodedLog {
   logIndex: string;
   removed: boolean;
   decoded: boolean;
-}
+};
 
 type Logs = DecodedLog | UnDecodedLog;
 
-interface UseLogParserResult {
+type UseLogParserResult = {
   isLoading: boolean;
   error: Error | null;
   logs: Logs[] | null;
   receipt: TransactionReceipt | null;
-}
+};
 
 export function useEventLogs(txHash: string): UseLogParserResult {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [decodedLogs, setDecodedLogs] = useState<DecodedLog[] | null>(null);
+  const [logs, setLogs] = useState<Logs[] | null>(null);
   const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function useEventLogs(txHash: string): UseLogParserResult {
         setReceipt(rec);
 
         if (!rec || !rec.logs) {
-          setDecodedLogs([]);
+          setLogs([]);
           return;
         }
 
@@ -123,7 +123,7 @@ export function useEventLogs(txHash: string): UseLogParserResult {
           }
         }
 
-        setDecodedLogs(parsedLogs);
+        setLogs(parsedLogs);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
@@ -134,5 +134,5 @@ export function useEventLogs(txHash: string): UseLogParserResult {
     parseTransactionLogs();
   }, [txHash]);
 
-  return { isLoading, error, decodedLogs, receipt };
+  return { isLoading, error, logs, receipt };
 }
