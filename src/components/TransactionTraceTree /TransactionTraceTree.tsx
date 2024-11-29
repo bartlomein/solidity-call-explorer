@@ -27,7 +27,6 @@ const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const callType = trace.action.callType.toUpperCase();
 
-    // Find child traces
     const childTraces = allTraces.filter((t) => {
       if (!t.traceAddress || !trace.traceAddress) return false;
       if (t.traceAddress.length !== trace.traceAddress.length + 1) return false;
@@ -76,7 +75,6 @@ const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
           )}
         </div>
 
-        {/* Render child traces */}
         {isExpanded && childTraces.length > 0 && (
           <div className="ml-4">
             {childTraces.map((childTrace, index) => (

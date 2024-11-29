@@ -14,7 +14,7 @@ type TransactionResult = {
   output: string;
 };
 
-type TransactionTrace = {
+export type TransactionTrace = {
   action: TransactionAction;
   result: TransactionResult;
   subtraces: number;
@@ -33,13 +33,13 @@ export interface TransactionTraceResponse {
 type UseTraceResult = {
   isLoading: boolean;
   error: Error | null;
-  trace: TransactionTrace[] | null;
+  trace: TransactionTraceResponse | null;
 };
 
 export function useTransactionTrace(txHash: string): UseTraceResult {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [trace, setTrace] = useState<TransactionTrace[] | null>(null);
+  const [trace, setTrace] = useState<TransactionTraceResponse | null>(null);
 
   useEffect(() => {
     const fetchTrace = async () => {

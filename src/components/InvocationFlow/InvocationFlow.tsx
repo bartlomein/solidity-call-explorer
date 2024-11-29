@@ -10,12 +10,28 @@ import TransactionTraceTree from "../TransactionTraceTree /TransactionTraceTree"
 import TransactionTraceViewer from "../TransactionTraceTree /TransactionTraceTree";
 
 const InvocationFlow = ({ hash }: { hash: string }) => {
-  const { isLoading, error, receipt, decodedLogs } = useEventLogs(hash);
-  const { trace } = useTransactionTrace(hash);
+  const {
+    isLoading: isEventsLoading,
+    error: logError,
+    logs,
+  } = useEventLogs(hash);
+
+  const {
+    isLoading: isTraceLoading,
+    error: traceError,
+    trace,
+  } = useTransactionTrace(hash);
 
   return (
     <div className="max-w-10xl mx-auto">
-      {trace && <TransactionTraceViewer data={trace} />}
+      {isTraceLoading ? <div>Loading Trace</div> : null}
+      {trace && !isTraceLoading ? (
+        <TransactionTraceViewer data={trace} />
+      ) : null}
+
+      {traceError ? (
+        <div className="text-red-500">{JSON.stringify(traceError)}</div>
+      ) : null}
     </div>
   );
 };
