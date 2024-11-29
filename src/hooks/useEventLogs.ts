@@ -30,7 +30,7 @@ type Fragment = {
   type: string;
   indexed: boolean;
   anonymous: boolean;
-  inputs: any[];
+  inputs: Record<string, string>[] | null;
 };
 
 export type DecodedLog = {
@@ -39,7 +39,7 @@ export type DecodedLog = {
   transfer: string;
   signature: string;
   decoded: boolean;
-  args: any[];
+  args: unknown[];
   topic: string | string[];
 };
 type UnDecodedLog = {
@@ -94,7 +94,7 @@ export function useEventLogs(txHash: string): UseLogParserResult {
           return;
         }
 
-        let parsedLogs: any = [];
+        let parsedLogs: Log[] = [];
 
         // doing this to handle API rate limiting for ABI calls
         for (const log of rec.logs) {

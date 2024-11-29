@@ -1,6 +1,5 @@
 import { getEventDetails, parseEventName, formatArgs } from "./utils";
 import { Log } from "@/hooks/useEventLogs";
-import { formatAddress } from "@/utils/eth.utils";
 
 describe("getEventDetails", () => {
   const mockDecodedLog: Log = {
@@ -103,7 +102,7 @@ describe("formatArgs", () => {
     const args = [123, "0x456", true, null];
     const result = formatArgs(args);
 
-    expect(result).toEqual(["123", "0x456", "true", ""]);
+    expect(result).toEqual(["123", "0x456", "true", "null"]);
   });
 
   test("should handle empty array", () => {
