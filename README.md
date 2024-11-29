@@ -85,6 +85,8 @@ Event ABI Call Look-up: Currently, event ABI look-ups are delayed to avoid rate 
 
 Code Splitting: By transitioning to a server-side page-based application, code splitting could be implemented. This would reduce the initial load time by serving only the necessary code for each page.
 
+React Query: Its powerful caching system automatically stores and manages server data, eliminating the need to write complex cache invalidation logic yourself while ensuring your UI stays in sync with the server. Its intelligent cache management includes automatic background refreshes and configurable stale times, meaning your data stays fresh without unnecessary network requests. The cache can be easily prefetched, invalidated, or updated optimistically, giving you fine-grained control while maintaining excellent performance.
+
 ### Short cuts
 
 Trace Call Data: Initially, there was no access to trace call data. The solution involved fetching logs, obtaining the necessary ABI, and decoding the data. However, matching the logs to the corresponding calls was not fully resolved. This approach was taken to ship the initial version while continuing to research a more robust solution.
