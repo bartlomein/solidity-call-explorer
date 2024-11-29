@@ -87,8 +87,18 @@ Code Splitting: By transitioning to a server-side page-based application, code s
 
 React Query: Its powerful caching system automatically stores and manages server data, eliminating the need to write complex cache invalidation logic yourself while ensuring your UI stays in sync with the server. Its intelligent cache management includes automatic background refreshes and configurable stale times, meaning your data stays fresh without unnecessary network requests. The cache can be easily prefetched, invalidated, or updated optimistically, giving you fine-grained control while maintaining excellent performance.
 
+State management: As the application grows to include more features, state management would be something to think about. Redux is tried and tested however has decent overhead to setup and upkeep. Zustand is growing more and more popular for its ease of use and minimization of rerenders on state change.
+
 ### Short cuts
 
 Trace Call Data: Initially, there was no access to trace call data. The solution involved fetching logs, obtaining the necessary ABI, and decoding the data. However, matching the logs to the corresponding calls was not fully resolved. This approach was taken to ship the initial version while continuing to research a more robust solution.
 
 Mobile Styling: The application is primarily designed for desktop use. Some quick mobile styling was implemented, but it requires further refinement to provide a better mobile experience.
+
+Client Side implementation: Discussed in more detail in above sections
+
+### Potential upcoming features
+
+- Search function to search through events and calls
+- More detailed tracecall data such as names of contracts being interacted with, etc.
+- Wallet hookup to let user see their transactions
