@@ -1,8 +1,8 @@
 import { Log } from "@/hooks/useEventLogs";
 import { formatAddress } from "@/utils/eth.utils";
 
-const formatArgs = (args: any[]) => {
-  return args.map((arg) => arg.toString());
+export const formatArgs = (args: any[]) => {
+  return args.map((arg) => (arg ? arg?.toString() : ""));
 };
 
 export const getEventDetails = (log: Log) => {
@@ -24,7 +24,7 @@ export const getEventDetails = (log: Log) => {
   };
 };
 
-const parseEventName = (log: Log): string => {
+export const parseEventName = (log: Log): string => {
   if (log.decoded && log.fragment.name) {
     return log.fragment.name;
   }

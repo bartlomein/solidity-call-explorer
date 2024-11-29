@@ -130,7 +130,6 @@ export function useEventLogs(txHash: string): UseLogParserResult {
 
         setLogs(parsedLogs);
       } catch (err) {
-        console.log("err2", err);
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
         setIsLoading(false);
