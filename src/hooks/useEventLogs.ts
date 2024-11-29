@@ -66,7 +66,7 @@ type UseLogParserResult = {
 };
 
 export function useEventLogs(txHash: string): UseLogParserResult {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [logs, setLogs] = useState<Log[] | null>(null);
   const [receipt, setReceipt] = useState<TransactionReceipt | null>(null);
@@ -74,7 +74,7 @@ export function useEventLogs(txHash: string): UseLogParserResult {
   useEffect(() => {
     const parseTransactionLogs = async () => {
       if (!txHash) return;
-
+      setIsLoading(true);
       try {
         // Fetch transaction receipt
         const response = await fetch(
@@ -85,12 +85,16 @@ export function useEventLogs(txHash: string): UseLogParserResult {
         const rec = data.result;
         setReceipt(rec);
 
+        if (data.status === "0") {
+          setError(rec);
+        }
+
         if (!rec || !rec.logs) {
           setLogs([]);
           return;
         }
 
-        const parsedLogs: any = [];
+        let parsedLogs: any = [];
 
         // doing this to handle API rate limiting for ABI calls
         for (const log of rec.logs) {
@@ -120,13 +124,13 @@ export function useEventLogs(txHash: string): UseLogParserResult {
             }
           } catch (e) {
             console.warn("Failed to decode log:", e);
-            // Push null for failed decodes to maintain index correlation
-            parsedLogs.push(null);
+            parsedLogs = [];
           }
         }
 
         setLogs(parsedLogs);
       } catch (err) {
+        console.log("err2", err);
         setError(err instanceof Error ? err : new Error("Unknown error"));
       } finally {
         setIsLoading(false);

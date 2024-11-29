@@ -1,14 +1,11 @@
-// TransactionFlow.tsx
-import { useQuery } from "@tanstack/react-query";
-import { ethers } from "ethers";
-import { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown } from "lucide-react";
 import { useEventLogs } from "@/hooks/useEventLogs";
 
 import { useTransactionTrace } from "@/hooks/useTransactionTrace";
-import TransactionTraceTree from "../TransactionTraceTree /TransactionTraceTree";
-import TransactionTraceViewer from "../TransactionTraceTree /TransactionTraceTree";
-import EventLog from "../EventLog/EventLog";
+
+import { TransactionTraceViewer } from "../TransactionTraceTree /TransactionTraceTree";
+import { EventLog } from "../EventLog/EventLog";
+import { Loading } from "../Loading/Loading";
+import { Error } from "../Error/Error";
 
 const InvocationFlow = ({ hash }: { hash: string }) => {
   const {
@@ -23,18 +20,21 @@ const InvocationFlow = ({ hash }: { hash: string }) => {
     trace,
   } = useTransactionTrace(hash);
 
-  console.log("logs", logs);
-
   return (
     <div className="max-w-6xl mx-auto">
-      {isTraceLoading ? <div>Loading Trace</div> : null}
-      {trace && !isTraceLoading ? (
+      {isTraceLoading ? <Loading name="trace call log" /> : null}
+
+      {trace && !isTraceLoading && !traceError ? (
         <TransactionTraceViewer data={trace} />
       ) : null}
-      {traceError ? (
-        <div className="text-red-500">{JSON.stringify(traceError)}</div>
-      ) : null}
-      {logs && !isEventsLoading ? <EventLog logs={logs} /> : null}
+
+      {traceError ? <Error error={traceError} /> : null}
+
+      {logs && !isEventsLoading && !logError ? <EventLog logs={logs} /> : null}
+
+      {isEventsLoading ? <Loading name="event log" /> : null}
+
+      {logError ? <Error error={logError} /> : null}
     </div>
   );
 };

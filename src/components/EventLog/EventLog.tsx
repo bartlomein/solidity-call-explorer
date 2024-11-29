@@ -37,7 +37,7 @@ const SingleLog = ({ isDecoded, name, inputs, args }: SingleLogP) => {
   );
 };
 
-const EventLog = ({ logs }: { logs: Log[] }) => {
+export const EventLog = ({ logs }: { logs: Log[] }) => {
   return (
     <div className="space-y-2 w-full max-w-8xl">
       <div>
@@ -63,5 +63,3 @@ const EventLog = ({ logs }: { logs: Log[] }) => {
     </div>
   );
 };
-
-export default EventLog;
