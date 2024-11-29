@@ -2,6 +2,8 @@ import React from "react";
 import { getEventDetails } from "./utils";
 import { Log } from "@/hooks/useEventLogs";
 import { Title } from "../Title/Title";
+import { Loading } from "../Loading/Loading";
+import { Error } from "../Error/Error";
 
 type SingleLogP = {
   isDecoded: boolean;
@@ -10,6 +12,12 @@ type SingleLogP = {
   address: string;
   inputs: Record<string, any>[] | null;
   args: Record<any, any> | null;
+};
+
+type EventLogP = {
+  logs: Log[] | null;
+  isLoading: boolean;
+  error: Error | null;
 };
 const SingleLog = ({ isDecoded, name, inputs, args }: SingleLogP) => {
   return (
@@ -37,38 +45,47 @@ const SingleLog = ({ isDecoded, name, inputs, args }: SingleLogP) => {
   );
 };
 
-export const EventLog = ({ logs }: { logs: Log[] }) => {
-  if (logs.length === 0) {
+export const EventLog = ({ logs, isLoading, error }: EventLogP) => {
+  if (isLoading) {
+    return <Loading name="event log" />;
+  }
+  if (error) {
+    return <Error error={error} />;
+  }
+
+  if (logs && logs.length === 0) {
     return (
       <div className="space-y-2 w-full max-w-8xl">
         <Title name="No event logs for this transaction" align="center" />
       </div>
     );
   }
-  return (
-    <div className="space-y-2 w-full max-w-8xl">
-      <div className="m-6">
-        <Title name="Event Log" align="center" />
-      </div>
-      <div className="border rounded  mt-4">
-        {logs.map((log, index) => {
-          const { isDecoded, name, blockNumber, address, inputs, args } =
-            getEventDetails(log);
+  if (logs) {
+    return (
+      <div className="space-y-2 w-full max-w-8xl">
+        <div className="m-6">
+          <Title name="Event Log" align="center" />
+        </div>
+        <div className="border rounded  mt-4">
+          {logs.map((log, index) => {
+            const { isDecoded, name, blockNumber, address, inputs, args } =
+              getEventDetails(log);
 
-          return (
-            <div key={index} className={`p-4 rounded-md`}>
-              <SingleLog
-                isDecoded={isDecoded}
-                name={name}
-                blockNumber={blockNumber}
-                address={address}
-                inputs={inputs}
-                args={args}
-              />
-            </div>
-          );
-        })}
+            return (
+              <div key={index} className={`p-4 rounded-md`}>
+                <SingleLog
+                  isDecoded={isDecoded}
+                  name={name}
+                  blockNumber={blockNumber}
+                  address={address}
+                  inputs={inputs}
+                  args={args}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
