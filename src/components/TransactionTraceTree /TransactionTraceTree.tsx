@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import { getCallTypeStyles } from "./utils";
 import {
@@ -27,13 +27,15 @@ const TraceItem = ({ trace, allTraces, depth = 0 }: TraceItemP) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const callType = trace.action.callType.toUpperCase();
 
-  const childTraces = allTraces.filter((t) => {
-    if (!t.traceAddress || !trace.traceAddress) return false;
-    if (t.traceAddress.length !== trace.traceAddress.length + 1) return false;
-    return t.traceAddress
-      .slice(0, -1)
-      .every((addr, i) => addr === trace.traceAddress[i]);
-  });
+  const childTraces = useMemo(() => {
+    return allTraces.filter((t) => {
+      if (!t.traceAddress || !trace.traceAddress) return false;
+      if (t.traceAddress.length !== trace.traceAddress.length + 1) return false;
+      return t.traceAddress
+        .slice(0, -1)
+        .every((addr, i) => addr === trace.traceAddress[i]);
+    });
+  }, [allTraces, trace.traceAddress]);
 
   return (
     <div className="font-mono text-sm">
