@@ -18,8 +18,6 @@ export const InvocationFlow = ({ hash }: { hash: string }) => {
     trace,
   } = useTransactionTrace(hash);
 
-  console.log("trace", isTraceLoading);
-
   return (
     <div className="max-w-6xl mx-auto">
       <TransactionTraceViewer

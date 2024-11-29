@@ -18,7 +18,7 @@ const CallExplorer = () => {
         </div>
       </div>
 
-      <InvocationFlow hash={txHash} />
+      {txHash ? <InvocationFlow hash={txHash} /> : null}
     </div>
   );
 };
