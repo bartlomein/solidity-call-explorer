@@ -103,16 +103,18 @@ export const TransactionTraceViewer = ({
   if (error) {
     return <Error error={error} />;
   }
-  if (data) {
-    return (
-      <div className="max-w-8xl mx-auto rounded-lg shadow">
-        <Title name="Call Trace Log" align="center" />
-        <div className="border rounded p-3 mt-4">
-          {data.trace && data.trace.length > 0 && (
-            <TraceItem trace={data.trace[0]} allTraces={data.trace} />
-          )}
-        </div>
-      </div>
-    );
+  if (!data) {
+    return <Title name="No transaction trace" align="center" />;
   }
+
+  return (
+    <div className="max-w-8xl mx-auto rounded-lg shadow">
+      <Title name="Call Trace Log" align="center" />
+      <div className="border rounded p-3 mt-4">
+        {data.trace && data.trace.length > 0 && (
+          <TraceItem trace={data.trace[0]} allTraces={data.trace} />
+        )}
+      </div>
+    </div>
+  );
 };
