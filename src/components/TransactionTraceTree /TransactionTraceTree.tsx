@@ -6,6 +6,8 @@ import {
   TransactionTraceResponse,
 } from "@/hooks/useTransactionTrace";
 
+import { formatValue } from "@/utils/eth.utils";
+
 type TransactionTraceViewerP = {
   data: TransactionTraceResponse;
 };
@@ -17,12 +19,6 @@ type TraceItemP = {
 };
 
 const TransactionTraceViewer = ({ data }: TransactionTraceViewerP) => {
-  const formatValue = (value: string) => {
-    if (!value || value === "0x0") return "0";
-    const val = parseInt(value, 16) / 1e18;
-    return val.toFixed(4);
-  };
-
   const TraceItem = ({ trace, allTraces, depth = 0 }: TraceItemP) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const callType = trace.action.callType.toUpperCase();

@@ -33,12 +33,13 @@ type Fragment = {
   inputs: any[];
 };
 
-type DecodedLog = {
+export type DecodedLog = {
   fragment: Fragment;
   name: string;
   transfer: string;
   signature: string;
   decoded: boolean;
+  args: any[];
   topic: string | string[];
 };
 type UnDecodedLog = {
@@ -54,7 +55,8 @@ type UnDecodedLog = {
   decoded: boolean;
 };
 
-export type Log = DecodedLog | UnDecodedLog;
+export type Log = UnDecodedLog &
+  ({ decoded: false } | ({ decoded: true } & DecodedLog));
 
 type UseLogParserResult = {
   isLoading: boolean;

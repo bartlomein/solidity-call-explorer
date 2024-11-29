@@ -1,19 +1,24 @@
 import { Log } from "@/hooks/useEventLogs";
 import { formatAddress } from "@/utils/eth.utils";
 
+const formatArgs = (args: any[]) => {
+  return args.map((arg) => arg.toString());
+};
+
 export const getEventDetails = (log: Log) => {
   const isDecoded = log.decoded === true;
   const name = parseEventName(log);
   const blockNumber = log.blockNumber;
+  const address = log.address;
 
-  const inputs = isDecoded ? log.fragment.inputs : {};
-  const args = isDecoded && "args" in log ? log.args : {};
+  const inputs = isDecoded ? log.fragment.inputs : null;
+  const args = isDecoded && "args" in log ? formatArgs(log.args) : null;
 
   return {
     isDecoded,
     name,
     blockNumber,
-    address: log.address,
+    address,
     inputs,
     args,
   };
