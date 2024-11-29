@@ -22,19 +22,13 @@ export const InvocationFlow = ({ hash }: { hash: string }) => {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {isTraceLoading ? <Loading name="trace call log" /> : null}
+      <TransactionTraceViewer
+        data={trace}
+        error={traceError}
+        isLoading={isTraceLoading}
+      />
 
-      {trace && !isTraceLoading && !traceError ? (
-        <TransactionTraceViewer data={trace} />
-      ) : null}
-
-      {traceError ? <Error error={traceError} /> : null}
-
-      {logs && !isEventsLoading && !logError ? <EventLog logs={logs} /> : null}
-
-      {isEventsLoading ? <Loading name="event log" /> : null}
-
-      {logError ? <Error error={logError} /> : null}
+      <EventLog logs={logs} error={logError} isLoading={isEventsLoading} />
     </div>
   );
 };
