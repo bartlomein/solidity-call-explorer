@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Solidity Call Explorer
 
-## Getting Started
+A tool for exploring and visualizing Ethereum transaction calls and events.
 
-First, run the development server:
+## Features
+
+- View transaction call traces in a hierarchical tree structure
+- Decode contract events and function calls
+- Search transactions by hash
+- View of Events emitted by smart contracts during transaction execucution
+
+## Prerequisites
+
+- Node.js 18+
+- npm/yarn
+- Etherscan API key
+- Alchemy API key
+
+## Setup
+
+1. Clone the repository:
+
+```bash
+git clone git@github.com:bartlomein/solidity-call-explorer.git
+cd solidity-call-explorer
+npm install
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Create a .env file in the root directory with your API keys:
+
+```bash
+NEXT_PUBLIC_ETHERSCAN_API=your_etherscan_api_key
+NEXT_PUBLIC_ALCHEMY_KEY=your_alchemy_api_key
+```
+
+## Running the application
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Testing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Analysis
 
-## Learn More
+## Design Decisions, Trade-offs, Potential Optimizations, and Short-cuts
 
-To learn more about Next.js, take a look at the following resources:
+This is an application to be able to view transaction call and event data for a particular transaction.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Next.js 15: Chosen for its ease of use and the potential to extend the application to server-side rendering in the future. Although the current implementation is a Single Page Application (SPA), Next.js provides the flexibility to transition to server-side rendering.
 
-## Deploy on Vercel
+- React 18: Provides a robust framework for building the user interface.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- TypeScript: Ensures type safety and improves code quality.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Tailwind CSS: Chosen for its utility-first approach, making it easy to style components.
+
+- Ethers.js: Preferred over Web3.js due to its smaller size and ease of use.
+
+- Jest and React Testing Library: Standard tools for testing React applications.
+
+- shadcn/ui components: Allows for quick installation and customization, as only the necessary components are installed and can be modified as needed.
+
+### Trade offs
+
+Client-side Implementation: The current implementation is entirely client-side, which simplifies the initial development and deployment. However, this approach exposes API keys and may result in slower initial load times due to client-side data fetching.
+
+Server-side Potential: Transitioning to a server-side implementation would provide several benefits, including obfuscating API keys and improving performance by reducing the time to first paint. This would involve routing to /transaction/[hash] and performing data fetching server-side.
+
+### Potential optimizations
+
+Event ABI Call Look-up: Currently, event ABI look-ups are delayed to avoid rate limits, which results in slower event data retrieval. Optimizing this process could significantly improve the user experience.
+
+Code Splitting: By transitioning to a server-side page-based application, code splitting could be implemented. This would reduce the initial load time by serving only the necessary code for each page.
+
+### Short cuts
+
+Trace Call Data: Initially, there was no access to trace call data. The solution involved fetching logs, obtaining the necessary ABI, and decoding the data. However, matching the logs to the corresponding calls was not fully resolved. This approach was taken to ship the initial version while continuing to research a more robust solution.
+
+Mobile Styling: The application is primarily designed for desktop use. Some quick mobile styling was implemented, but it requires further refinement to provide a better mobile experience.
