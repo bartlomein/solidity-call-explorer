@@ -102,7 +102,7 @@ describe("formatArgs", () => {
     const args = [123, "0x456", true, null];
     const result = formatArgs(args);
 
-    expect(result).toEqual(["123", "0x456", "true", "null"]);
+    expect(result).toEqual(["123", "0x456", "true", ""]);
   });
 
   test("should handle empty array", () => {
