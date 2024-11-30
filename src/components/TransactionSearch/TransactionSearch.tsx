@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
@@ -25,11 +25,18 @@ export const TransactionSearch = ({
     }
   };
 
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 ">
         <Input
           value={txHash}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setTxHash(e.target.value)}
           placeholder="Enter transaction hash..."
           className={cn(error && "border-red-500")}
